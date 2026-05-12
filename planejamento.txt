@@ -1,0 +1,7 @@
+- homepage
+- login e criar conta (usuario e autentificação)
+- editar perfil
+- usuario (email, username, senha, filmes_vistos)
+- filmes (episodios (videos, titulo), thumb, titulo, descrição, categoria, qtde_views, data_criação)
+- barra de pesquisa
+

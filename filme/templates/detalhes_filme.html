@@ -1,0 +1,125 @@
+{% extends "base.html" %} {% load static %} {% block title %}Detalhes do Filme -
+Hashflix{% endblock %} {% block head %}
+<style>
+  /* Estilização da scrollbar para ficar discreta (estilo Netflix) */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: #181818;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+</style>
+{% endblock %} {% block content %}
+<main class="bg-black min-h-screen w-full text-white">
+  <section
+    class="h-[80vh] relative bg-no-repeat pb-12 pl-10 flex items-end bg-cover bg-center"
+    style="background-image: url('{{object.thumb.url}}');"
+  >
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"
+    ></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"
+    ></div>
+
+    <div class="relative z-10 max-w-2xl">
+      <h2 class="text-6xl font-bold text-white mb-4 drop-shadow-2xl">
+        {{object.titulo}}
+      </h2>
+      <p class="text-lg font-medium text-gray-200 mb-6 drop-shadow-lg">
+        {{object.descricao|slice:150}}...
+      </p>
+
+      <div class="flex my-4">
+        <a href="{{object.episodios.first.video}}" target="_blank">
+          <button
+            class="flex items-center bg-white hover:bg-gray-200 py-2 px-8 rounded-md transition duration-300"
+          >
+            <ion-icon name="play" class="text-black text-2xl"></ion-icon>
+            <span class="text-black ml-2 font-bold text-lg"> Play </span>
+          </button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex justify-center py-8">
+    <div class="w-10/12 relative">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div>
+          <h2
+            class="text-gray-400 text-sm uppercase tracking-widest font-bold mb-2"
+          >
+            Descrição
+          </h2>
+          <p class="text-gray-100 text-lg leading-relaxed mb-4">
+            {{object.descricao}}
+          </p>
+          <p class="text-red-600 font-semibold">
+            Visualizações: <span class="text-white">{{object.qtde_views}}</span>
+          </p>
+        </div>
+
+        {% if object.episodios.all %}
+        <div class="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800">
+          <h2 class="text-white text-2xl font-bold mb-4">Episódios</h2>
+
+          <div class="space-y-3 max-h-96 overflow-y-auto scrollbar-thin pr-2">
+            {% for episodio in object.episodios.all %}
+            <a
+              href="{{ episodio.video }}"
+              target="_blank"
+              class="flex items-center p-3 rounded-md hover:bg-zinc-800 transition group"
+            >
+              <ion-icon
+                name="play-circle"
+                class="text-2xl text-red-600 mr-3"
+              ></ion-icon>
+              <span class="text-gray-300 group-hover:text-white">
+                Episódio {{forloop.counter}} - {{ episodio.titulo }}
+              </span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {% if filmes_relacionados %}
+  <section class="flex justify-center py-10">
+    <div class="w-10/12 relative">
+      <h2 class="text-gray-200 text-2xl font-bold mb-6">Relacionados</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% for filme in filmes_relacionados %}
+        <div
+          class="group relative overflow-hidden rounded-md transition duration-300 hover:scale-105"
+        >
+          <a href="{% url 'filme:detalhes_filme' filme.pk %}">
+            <img
+              src="{{ filme.thumb.url }}"
+              class="object-cover w-full h-48 shadow-lg"
+              alt="{{ filme.titulo }}"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition"
+            >
+              <span class="text-white font-bold">Ver Detalhes</span>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</main>
+{% endblock %}

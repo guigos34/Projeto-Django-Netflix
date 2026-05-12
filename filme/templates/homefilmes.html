@@ -1,0 +1,248 @@
+{% extends "base.html" %} {% load static %} {% block title %}Home Filmes -
+Hashflix{% endblock %} {% block head %}
+<style>
+  /* Variáveis CSS padrão */
+  a {
+    text-decoration: none;
+  }
+  :root {
+    --itemGrow: 1.1; /* Escala reduzida para não cortar as imagens */
+    --duration: 250ms;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Espaço para a navbar fixa */
+  }
+
+  body {
+    margin: 0;
+    background-color: #000;
+  }
+
+  /* Carrossel e Wrapper */
+  .wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 100%);
+    overflow: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .wrapper section {
+    width: 100%;
+    position: relative;
+    margin: 5px 0; /* Espaçamento vertical entre as linhas do carrossel */
+  }
+
+  .wrapper section .item {
+    padding: 0 2px;
+    transition: var(--duration) all;
+  }
+
+  .wrapper section .item:hover {
+    margin: 0 15px; /* Espaço lateral ao dar zoom */
+    transform: scale(var(--itemGrow));
+    z-index: 20;
+  }
+
+  /* Setas de navegação */
+  .wrapper section a.arrow__btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 4em;
+    background: rgba(0, 0, 0, 0.5);
+    width: 60px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    transition: background 0.3s;
+  }
+
+  .wrapper section a.arrow__btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .wrapper section > a.arrow__btn:first-child {
+    left: 0;
+    background: linear-gradient(
+      -90deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 100%
+    );
+  }
+
+  .wrapper section > a.arrow__btn:last-child {
+    right: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 100%
+    );
+  }
+
+  @media only screen and (max-width: 600px) {
+    a.arrow__btn {
+      display: none !important;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<main class="bg-black min-h-screen w-full">
+  <a href="{% url 'filme:detalhes_filme' filme_destaque.id %}">
+    <section
+      class="h-[80vh] relative bg-no-repeat pb-12 pl-10 flex items-end bg-cover bg-center mb-10"
+      style="background-image: url('{{ filme_destaque.thumb.url }}');"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"
+      ></div>
+
+      <div class="relative z-10 max-w-2xl">
+        <h2 class="text-6xl font-bold text-white mb-4 drop-shadow-lg">
+          {{ filme_destaque.titulo }}
+        </h2>
+        <p class="text-lg font-medium text-gray-200 mb-6 drop-shadow-md">
+          {{ filme_destaque.descricao|slice:150 }}...
+        </p>
+        <div class="flex">
+          <a href="{{ filme_destaque.episodios.first.video }}" target="_blank">
+            <button
+              class="flex items-center bg-white hover:bg-gray-200 py-2 px-8 rounded-md transition duration-300"
+            >
+              <ion-icon name="play" class="text-black text-2xl"></ion-icon>
+              <span class="text-black ml-2 font-bold text-lg">Play</span>
+            </button>
+          </a>
+        </div>
+      </div>
+    </section>
+  </a>
+
+  <section class="flex justify-center py-4 mb-15">
+    <div class="w-11/12 relative">
+      <h2 class="text-gray-200 text-xl font-semibold mb-2 ml-4">Novos</h2>
+      <div class="wrapper">
+        <section id="section1" class="flex flex-nowrap items-center">
+          <a href="#section2" class="arrow__btn">‹</a>
+          {% for filme in filmes_recente %} {% if forloop.counter < 5 %}
+          <div class="item h-48 w-1/4 m-2">
+            <a href="{% url 'filme:detalhes_filme' filme.id %}">
+              <img
+                src="{{filme.thumb.url}}"
+                class="rounded-md w-full h-full object-cover shadow-lg"
+              />
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+          <a href="#section2" class="arrow__btn">›</a>
+        </section>
+
+        {% if filmes_recente|length > 4 %}
+        <section id="section2" class="flex flex-nowrap items-center">
+          <a href="#section1" class="arrow__btn">‹</a>
+          {% for filme in filmes_recente %} {% if forloop.counter > 4 %}
+          <div class="item h-48 w-1/4 m-2">
+            <a href="{% url 'filme:detalhes_filme' filme.id %}">
+              <img
+                src="{{filme.thumb.url}}"
+                class="rounded-md w-full h-full object-cover shadow-lg"
+              />
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+          <a href="#section1" class="arrow__btn">›</a>
+        </section>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="flex justify-center py-4 mb-15">
+    <div class="w-11/12 relative">
+      <h2 class="text-gray-200 text-xl font-semibold mb-2 ml-4">Em alta</h2>
+      <div class="wrapper">
+        <section id="section3" class="flex flex-nowrap items-center">
+          <a href="#section4" class="arrow__btn">‹</a>
+          {% for filme in filmes_destaque %} {% if forloop.counter < 5 %}
+          <div class="item h-48 w-1/4 m-2">
+            <a href="{% url 'filme:detalhes_filme' filme.id %}">
+              <img
+                src="{{filme.thumb.url}}"
+                class="rounded-md w-full h-full object-cover shadow-lg"
+              />
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+          <a href="#section4" class="arrow__btn">›</a>
+        </section>
+
+        {% if filmes_destaque|length > 4 %}
+        <section id="section4" class="flex flex-nowrap items-center">
+          <a href="#section3" class="arrow__btn">‹</a>
+          {% for filme in filmes_destaque %} {% if forloop.counter > 4 %}
+          <div class="item h-48 w-1/4 m-2">
+            <a href="{% url 'filme:detalhes_filme' filme.id %}">
+              <img
+                src="{{filme.thumb.url}}"
+                class="rounded-md w-full h-full object-cover shadow-lg"
+              />
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+          <a href="#section3" class="arrow__btn">›</a>
+        </section>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="flex justify-center py-4">
+    <div class="w-11/12 relative">
+      <h2 class="text-gray-200 text-xl font-semibold mb-2 ml-4">
+        Assistir denovo
+      </h2>
+      <div class="wrapper">
+        <section id="section5" class="flex flex-nowrap items-center">
+          <a href="#section6" class="arrow__btn">‹</a>
+          {% for filme in request.user.filmes_vistos.all %}
+          <!-- prettier-ignore -->
+          {% if forloop.counter < 5 %}
+          <div class="item h-48 w-1/4 m-2">
+            <a href="{% url 'filme:detalhes_filme' filme.id %}">
+              <img
+                src="{{filme.thumb.url}}"
+                class="rounded-md w-full h-full object-cover shadow-lg"
+              />
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+          <a href="#section6" class="arrow__btn">›</a>
+        </section>
+
+        {% if request.user.filmes_vistos.all|length > 4 %}
+        <section id="section6" class="flex flex-nowrap items-center">
+          <a href="#section5" class="arrow__btn">‹</a>
+          {% for filme in request.user.filmes_vistos.all %}
+          <!-- prettier-ignore -->
+          {% if forloop.counter > 4 %}
+          <div class="item h-48 w-1/4 m-2">
+            <a href="{% url 'filme:detalhes_filme' filme.id %}">
+              <img
+                src="{{filme.thumb.url}}"
+                class="rounded-md w-full h-full object-cover shadow-lg"
+              />
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+          <a href="#section5" class="arrow__btn">›</a>
+        </section>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %} {% load static %}
+
+<!-- prettier-ignore -->
+{% block title %}Home - Hashflix{% endblock %}
+<!-- prettier-ignore -->
+{%block content %}
+<style>
+  #id_email {
+    width: 100%;
+    background-color: white;
+    padding: 5px 5px;
+  }
+</style>
+<header
+  class="min-h-screen bg-black/70 bg-blend-multiply showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat bg-cover bg-center"
+  style="
+    background-image: url(&quot;{% static 'images/background_netflix.jpg' %}&quot;);
+  "
+>
+  <div
+    class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col w-full"
+  >
+    <h1 class="font-semibold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
+      Filmes e séries da Hashtag, tudo em um só lugar.
+    </h1>
+    <h3 class="text-xl md:text-xl py-5">
+      Assista onde quiser. Cancele quando quiser.
+    </h3>
+    <h4 class="text-sm md:text-lg pb-3">
+      Quer começar? Coloque seu e-mail abaixo para acessar.
+    </h4>
+
+    <div class="w-full flex justify-center mt-4">
+      <div class="flex justify-center items-center w-full">
+        <form
+          method="post"
+          class="flex flex-col md:flex-row items-stretch w-11/12 md:w-8/12 lg:w-5/12 gap-0"
+        >
+          {% csrf_token %} {{ form.email }}
+          <button
+            class="bg-red-600 hover:bg-red-700 transition font-medium flex justify-center items-center py-2 px-6 text-lg whitespace-nowrap"
+            type="submit"
+          >
+            <span> Acessar </span>
+            <ion-icon name="chevron-forward-outline" class="ml-2"></ion-icon>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section
+  class="flex flex-col md:flex-row items-center border-gray-900 border-b-8"
+  style="min-height: 70vh"
+>
+  <div
+    class="md:w-1/2 flex flex-col justify-center text-center md:text-left p-5 md:p-10"
+  >
+    <h2 class="md:text-5xl text-4xl font-semibold mb-4">Enjoy on your TV.</h2>
+    <h5 class="md:text-xl text-lg">
+      Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray
+      players, and more.
+    </h5>
+  </div>
+  <div class="md:w-1/2 flex justify-center items-center">
+    <img src="{% static 'images/tv.png' %}" class="w-8/12" alt="TV" />
+  </div>
+</section>
+
+<section
+  class="flex flex-col md:flex-row items-center border-gray-900 border-b-8"
+  style="min-height: 70vh"
+>
+  <div class="md:w-1/2 flex justify-center items-center">
+    <img
+      src="{% static 'images/mobile-0819.jpg' %}"
+      class="w-8/12"
+      alt="Mobile"
+    />
+  </div>
+
+  <div
+    class="md:w-1/2 flex flex-col justify-center text-center md:text-left p-5 md:p-10"
+  >
+    <h2 class="md:text-5xl text-4xl font-semibold mb-4">
+      Download your shows to watch offline.
+    </h2>
+    <h5 class="md:text-xl text-lg">
+      Save your favorites easily and always have something to watch.
+    </h5>
+  </div>
+</section>
+
+<section
+  class="flex flex-col md:flex-row items-center border-gray-900 border-b-8"
+  style="min-height: 70vh"
+>
+  <div
+    class="md:w-1/2 flex flex-col justify-center text-center md:text-left p-5 md:p-10"
+  >
+    <h2 class="md:text-5xl text-4xl font-semibold mb-4">
+      Create profiles for kids.
+    </h2>
+    <h5 class="md:text-xl text-lg">
+      Send kids on adventures with their favorite characters in a space made
+      just for them—free with your membership.
+    </h5>
+  </div>
+  <div class="md:w-1/2 flex justify-center items-center">
+    <img
+      src="{% static 'images/netflix_kid.png' %}"
+      class="w-8/12"
+      alt="Kids Profile"
+    />
+  </div>
+</section>
+
+{% endblock %}

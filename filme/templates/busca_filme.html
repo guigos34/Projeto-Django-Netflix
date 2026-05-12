@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %}Busca de Filmes{% endblock %}
+<!-- prettier-ignore -->
+{% load static %}
+<!-- prettier-ignore -->
+{%block head%} {% endblock %}
+<!-- prettier-ignore -->
+{% block content %}
+<main class="bg-primary_black min-h-screen w-full">
+  <section class="bg-primary_black min-h-screen flex justify-center py-10">
+    <div class="p-8 w-10/12 relative">
+      <h2 class="text-gray-200 text-2xl font-medium mb-4">
+        Resultados da Busca
+      </h2>
+
+      <div class="flex flex-wrap items-center min-w-full movie_list">
+        {# 1. Use o nome que você definiu na View: lista_filmes_busca #}
+        <!-- prettier-ignore -->
+        {% if lista_filmes_busca %}
+        <!-- prettier-ignore -->
+        {% for filme in lista_filmes_busca %}
+        <div
+          class="m-4 bg-blue-500 overflow-hidden flex-shrink-0 rounded-md cursor-pointer h-64 w-96"
+        >
+          <a href="{% url 'filme:detalhes_filme' filme.id %}">
+            <img
+              src="{{ filme.thumb.url }}"
+              class="object-cover w-full h-full"
+              alt="{{ filme.titulo }}"
+            />
+          </a>
+        </div>
+        {% endfor %} {% else %}
+        <p class="text-gray-200">Nenhum filme encontrado para sua pesquisa.</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
